@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>図面AI-OCR積算｜静的デモ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./styles.css" />
+  <!-- SheetJS (Excel生成) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>図面AI-OCR積算｜デモ（静的）</h1>
+    <div class="right">
+      <label>件名:
+        <input id="subject" type="text" placeholder="ビル 1階梁伏図（デモ用）" />
+      </label>
+      <button id="btn-demo">デモを読み込む</button>
+      <button id="btn-reset">リセット</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="left">
+      <div class="panel">
+        <h3>図面画像 / 検出結果</h3>
+        <div class="row">
+          <label class="btn">画像を選択<input id="file-img" type="file" accept="image/*"></label>
+          <label class="btn">検出JSON<input id="file-json" type="file" accept="application/json"></label>
+        </div>
+        <div class="row">
+          <label>しきい値:
+            <input id="thres" type="range" min="0" max="1" step="0.05" value="0.5"/>
+            <span id="thresVal">0.50</span>
+          </label>
+          <label>拡大エリア(px):
+            <input id="zoomSize" type="range" min="80" max="300" step="10" value="160"/>
+            <span id="zoomSizeVal">160</span>
+          </label>
+          <label>拡大倍率:
+            <input id="zoomScale" type="range" min="2" max="6" step="1" value="3"/>
+            <span id="zoomScaleVal">3</span>
+          </label>
+        </div>
+        <canvas id="canvas"></canvas>
+        <div class="hint">キャンバス上で<strong>2点クリック</strong>してください → スケール(px/mm)を算出し、右の拡大プレビューに表示します。</div>
+      </div>
+    </section>
+
+    <section class="right">
+      <div class="panel">
+        <h3>スケール校正（2点クリック）</h3>
+        <div class="row">
+          <label>実寸(mm):
+            <input id="realmm" type="number" min="1" step="10" value="1000"/>
+          </label>
+          <div id="scaleInfo">スケール: ‐</div>
+        </div>
+        <canvas id="zoom"></canvas>
+        <div id="zoomMeta">拡大プレビュー</div>
+      </div>
+
+      <div class="panel">
+        <h3>エクスポート</h3>
+        <div class="row">
+          <button id="btn-csv">CSVダウンロード</button>
+          <button id="btn-xlsx">見積書(Excel)ダウンロード</button>
+        </div>
+        <div class="row">
+          <table id="summary"></table>
+        </div>
+        <div class="row">
+          <h4>明細（上位50件）</h4>
+          <table id="detail"></table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <small>※このデモは事前計算済みJSONを利用しています。PoC/本番ではサーバ側でOCR推論を行います。</small>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
