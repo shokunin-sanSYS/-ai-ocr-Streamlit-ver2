@@ -82,6 +82,7 @@ function updateScale() {
     const a = clicks[clicks.length-2], b = clicks[clicks.length-1];
     const dpx = Math.hypot(a.x - b.x, a.y - b.y);
     pxPerMM = dpx / parseFloat(realmm.value);
+    if (!isFinite(pxPerMM)) return;
     scaleInfo.textContent = `スケール: ${pxPerMM.toFixed(3)} px/mm`;
   }
 }
@@ -98,7 +99,7 @@ cnv.addEventListener('click', (e)=>{
 thres.oninput = ()=>{ thresVal.textContent = (+thres.value).toFixed(2); drawAll(); };
 zoomSize.oninput = ()=>{ zoomSizeVal.textContent = zoomSize.value; if (clicks.length) setZoomAround(clicks[clicks.length-1]); };
 zoomScale.oninput = ()=>{ zoomScaleVal.textContent = zoomScale.value; if (clicks.length) setZoomAround(clicks[clicks.length-1]); };
-realmm.oninput = ()=>{ updateScale(); if (clicks.length) setZoomAround(clicks[clicks.length-1]); };
+realmm.oninput = ()=>{ updateScale(); if (clicks.length) setZoomAround(clicks[clicks.length-1]); updateScale();};
 
 document.getElementById('btn-reset').onclick = ()=>{
   clicks = []; pxPerMM = null; scaleInfo.textContent = 'スケール: ‐';
